@@ -34,13 +34,12 @@ INSERT INTO appointments (patient_id, doctor_id, appointment_datetime, amount_pa
   (2, 1, TIMESTAMP(DATE_ADD(CURDATE(), INTERVAL 7 DAY), '14:00:00'), 150.00),
   (3, 1, TIMESTAMP(DATE_ADD(CURDATE(), INTERVAL 7 DAY), '14:30:00'), 150.00);
 
--- A few ordinary bookings for the other doctor.
 INSERT INTO appointments (patient_id, doctor_id, appointment_datetime, amount_paid) VALUES
   (2, 2, TIMESTAMP(DATE_ADD(CURDATE(), INTERVAL 1 DAY), '10:00:00'), 100.00),
   (3, 2, TIMESTAMP(DATE_ADD(CURDATE(), INTERVAL 1 DAY), '11:00:00'), 100.00),
   (1, 2, TIMESTAMP(DATE_ADD(CURDATE(), INTERVAL 2 DAY), '09:30:00'), 100.00);
 
--- One past-style cancellation kept for refund history (50% refund example).
+-- One past-style cancellation kept for refund history 
 INSERT INTO appointments (patient_id, doctor_id, appointment_datetime, amount_paid,
                           status, refund_amount, cancelled_at) VALUES
   (1, 1, TIMESTAMP(DATE_ADD(CURDATE(), INTERVAL 3 DAY), '15:00:00'), 150.00,
