@@ -1,0 +1,37 @@
+// MediBook schema — paste into https://dbdiagram.io to render/edit
+
+Table patients {
+  id          int unsigned [pk, increment]
+  name        varchar(100) [not null]
+  email       varchar(255) [not null, unique]
+  phone       varchar(30)  [not null]
+  created_at  timestamp    [not null, default: `CURRENT_TIMESTAMP`]
+}
+
+Table doctors {
+  id                int unsigned [pk, increment]
+  name              varchar(100) [not null]
+  specialty         varchar(100) [not null]
+  consultation_fee  decimal(10,2) [not null, note: 'CHECK >= 0']
+  room              varchar(20)  [not null]
+  created_at        timestamp    [not null, default: `CURRENT_TIMESTAMP`]
+}
+
+Table appointments {
+  id                   int unsigned [pk, increment]
+  patient_id           int unsigned [not null, ref: > patients.id]
+  doctor_id            int unsigned [not null, ref: > doctors.id]
+  appointment_datetime datetime [not null, note: 'CHECK 30-min boundary; CHECK 09:00-16:30']
+  amount_paid          decimal(10,2) [not null, note: 'CHECK >= 0']
+  status               enum('confirmed','cancelled') [not null, default: 'confirmed']
+  refund_amount        decimal(10,2) [null, note: 'CHECK NULL or >= 0']
+  cancelled_at         datetime [null]
+  booked_at            timestamp [not null, default: `CURRENT_TIMESTAMP`]
+  active_slot          tinyint [note: 'GENERATED: 1 if confirmed else NULL. UNIQUE(doctor_id, appointment_datetime, active_slot) => a doctor cannot have two confirmed appointments at the same date/time']
+
+  indexes {
+    (doctor_id, appointment_datetime, active_slot) [unique]
+    (doctor_id, appointment_datetime)
+    (patient_id)
+  }
+}
