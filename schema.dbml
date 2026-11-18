@@ -1,4 +1,3 @@
-// MediBook schema — paste into https://dbdiagram.io to render/edit
 
 Table patients {
   id          int unsigned [pk, increment]
